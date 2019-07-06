@@ -56,12 +56,17 @@ object Utils {
         for (c in s) {
             val newChar = list["${c.toLowerCase()}"]
             if (newChar != null) {
-                if (newChar.length > 1 && c.isUpperCase()) {
-                    result += newChar.first().toUpperCase()
-                    result += newChar.last()
+                if (c.isUpperCase()) {
+                    if (newChar.length > 1) {
+                        result += newChar.first().toUpperCase()
+                        result += newChar.last()
+                    }
+                    else {
+                        result += newChar.toUpperCase()
+                    }
                 }
                 else {
-                    result += if (c.isUpperCase()) newChar.toUpperCase() else newChar
+                    result += newChar
                 }
             }
             else {
