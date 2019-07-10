@@ -86,7 +86,9 @@ data class User(
             return this
         }
         fun avatar(s:String):UserBuilder{
-            avatar = s
+            if (s != null && s.isNotEmpty()) {
+                avatar = s
+            }
             return this
         }
         fun rating(n:Int):UserBuilder{
@@ -105,12 +107,9 @@ data class User(
             isOnline = b
             return this
         }
-        fun build():User{
-            if (id == null){
-                throw IllegalArgumentException()
-            }
+        fun build():User {
             return User(
-                id=id!!,
+                id=if (id == null) "" else id!!,
                 firstName = firstName,
                 lastName = lastName,
                 avatar = avatar,

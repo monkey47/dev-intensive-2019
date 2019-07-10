@@ -29,42 +29,61 @@ fun Date.humanizeDiff(paramDate: Date = Date()): String {
     val tmp = paramDate.time - this.time
     val isFuture = tmp < 0
     val interval = Math.abs(tmp)
-    if (interval < 1 * SECOND) {
+    if (interval <= 1 * SECOND) {
         return "только что"
     } else if (interval > 360 * DAY) {
         return "более ${if (isFuture) "чем через год" else "года назад"}"
     }
     val core = when {
-        interval < 45 * SECOND -> "несколько секунд"
-        interval < 75 * SECOND -> "минуту"
-        interval < 45 * MINUTE -> getUnit(interval / MINUTE, TimeUnits.MINUTE)
-        interval < 75 * MINUTE -> getUnit(interval / MINUTE, TimeUnits.MINUTE)
-        interval < 22 * HOUR -> getUnit(interval / HOUR, TimeUnits.HOUR)
-        interval < 26 * HOUR -> "день"
+        interval <= 45 * SECOND -> "несколько секунд"
+        interval <= 75 * SECOND -> "минуту"
+        interval <= 45 * MINUTE -> getUnit(interval / MINUTE, TimeUnits.MINUTE)
+        interval <= 75 * MINUTE -> "час"
+        interval <= 22 * HOUR -> getUnit(interval / HOUR, TimeUnits.HOUR)
+        interval <= 26 * HOUR -> "день"
         else -> getUnit(interval / DAY, TimeUnits.DAY)
     }
     return if (isFuture) "через $core" else "$core назад"
 }
 
 private fun getUnit(count: Long, units: TimeUnits): String {
-    val unit = when (count % 10) {
-        in 2..4 -> when (units) {
-            TimeUnits.SECOND -> "секунды"
-            TimeUnits.MINUTE -> "минуты"
-            TimeUnits.HOUR -> "часа"
-            TimeUnits.DAY -> "дня"
-        }
-        1L -> when (units) {
-            TimeUnits.SECOND -> "секунду"
-            TimeUnits.MINUTE -> "минуту"
-            TimeUnits.HOUR -> "час"
-            TimeUnits.DAY -> "дней"
-        }
-        else -> when (units) {
+    var unit:String
+    if (count in 11 .. 19) {
+        unit = when (units) {
             TimeUnits.SECOND -> "секунд"
             TimeUnits.MINUTE -> "минут"
             TimeUnits.HOUR -> "часов"
             TimeUnits.DAY -> "дней"
+        }
+    }
+    else if (count % 100 in 11 .. 19) {
+        unit = when (units) {
+            TimeUnits.SECOND -> "секунд"
+            TimeUnits.MINUTE -> "минут"
+            TimeUnits.HOUR -> "часов"
+            TimeUnits.DAY -> "дней"
+        }
+    }
+    else {
+        unit = when (count % 10) {
+            in 2..4 -> when (units) {
+                TimeUnits.SECOND -> "секунды"
+                TimeUnits.MINUTE -> "минуты"
+                TimeUnits.HOUR -> "часа"
+                TimeUnits.DAY -> "дня"
+            }
+            1L -> when (units) {
+                TimeUnits.SECOND -> "секунду"
+                TimeUnits.MINUTE -> "минуту"
+                TimeUnits.HOUR -> "час"
+                TimeUnits.DAY -> "день"
+            }
+            else -> when (units) {
+                TimeUnits.SECOND -> "секунд"
+                TimeUnits.MINUTE -> "минут"
+                TimeUnits.HOUR -> "часов"
+                TimeUnits.DAY -> "дней"
+            }
         }
     }
     return "$count $unit"

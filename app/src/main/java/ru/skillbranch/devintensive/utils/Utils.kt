@@ -2,7 +2,7 @@ package ru.skillbranch.devintensive.utils
 
 object Utils {
     fun parseFullName(fullName:String?) :Pair<String?, String?> {
-        val parts: List<String>? = fullName?.split(" ")
+        val parts: List<String>? = fullName?.trim()?.split(" ")
 
         var firstName = parts?.getOrNull(0)
         if (firstName == "") {
@@ -56,13 +56,13 @@ object Utils {
         for (c in s) {
             val newChar = list["${c.toLowerCase()}"]
             if (newChar != null) {
-                if (c.isUpperCase()) {
+                if (c.isUpperCase() && newChar.isNotEmpty()) {
+                    result += newChar.first().toUpperCase()
                     if (newChar.length > 1) {
-                        result += newChar.first().toUpperCase()
+                        if (newChar.length == 3) {
+                            result += newChar[1]
+                        }
                         result += newChar.last()
-                    }
-                    else {
-                        result += newChar.toUpperCase()
                     }
                 }
                 else {

@@ -10,5 +10,6 @@ fun String.truncate(count:Int = 16):String {
 
 fun String.stripHtml():String{
     return this.replace("</?[^>]+>".toRegex(), "")
-        .replace("\\s+".toRegex(), " ")
+        .replace("&[^; А-я]+;".toRegex(), "")
+        .replace(" +".toRegex(), " ")
 }
