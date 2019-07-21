@@ -115,7 +115,7 @@ data class User(
                 avatar = avatar,
                 rating = rating,
                 respect = respect,
-                lastVisit = lastVisit,
+                lastVisit = if(lastVisit == null) Date() else lastVisit,
                 isOnline = isOnline
             )
         }
