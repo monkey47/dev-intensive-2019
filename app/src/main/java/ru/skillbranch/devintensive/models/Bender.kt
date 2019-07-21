@@ -18,21 +18,20 @@ class Bender(
     }
 
     fun listenAnswer(answer: String): Pair<String, Triple<Int, Int, Int>> {
-        return if (question.answers.contains(answer)) {
-            question = question.nextQuestion()
-            "Отлично это правильный ответ!\n${question.question}" to status.color
-        } else {
-            if (errorCount++ > 3)
-            {
+        return when {
+            question.answers.contains(answer) -> {
+                question = question.nextQuestion()
+                return "Отлично это правильный ответ!\n${question.question}" to status.color
+            }
+            errorCount++ > 3 -> {
                 this.question = Question.NAME
                 this.status = Status.NORMAL
                 errorCount = 0
                 "Это неправильный ответ. Давай все по новой\n${question.question}" to status.color
             }
-            else
-            {
+            else -> {
                 status = status.nextStatus()
-                "Это не правильный ответ!\n${question.question}" to status.color
+                "Это неправильный ответ\n${question.question}" to status.color
             }
         }
     }
@@ -72,7 +71,7 @@ class Bender(
             override fun nextQuestion(): Question = IDLE
         },
         IDLE("На этом всё вопросов больше нет", listOf()) {
-            override fun nextQuestion(): Question = IDLE
+            override fun nextQuestion(): Question = NAME
         };
 
         abstract fun nextQuestion(): Question
